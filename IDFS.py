@@ -2,12 +2,12 @@ def IDFS(arr):
     depth = 0
     global total_expanded
     total_expanded = 0
-    while True:
-        
+    while depth < 50:  # Add max depth limit
         result = DFS(arr, depth, [tuple(arr)])
         if result:
-            return result
+            return result, depth
         depth += 1
+    return None, depth
 
 
 def DFS(node, depth, path):
@@ -95,11 +95,17 @@ for i in range(0, 9, 3):
     print(arr[i:i+3])
 
 if checkinstances(arr):
-    result = IDFS(arr)
+    result, depth = IDFS(arr)
     if result:
         print("\nGoal found!")
         print_path(result)
         print(f"\nTotal nodes expanded: {total_expanded}")
+        result = {
+            "parent": result,
+            "expanded": total_expanded,
+            "cost": len(result) - 1,
+            "solution_depth": depth
+        }
     else:
         print("No solution found.")
 else:
