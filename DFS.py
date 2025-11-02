@@ -14,21 +14,19 @@ def DfS(arr):
         max_search_depth = max(max_search_depth, depth)
         
         if Isgoal(node):
-            return node, parent, expanded, max_search_depth
+            return node, parent, expanded, max_search_depth  # Return max_search_depth
         
         for neighbour in getneighbours(node):
             nkey = tuple(neighbour)
             if nkey not in visited:
                 visited.add(nkey)
                 parent[nkey] = key
-                new_depth = depth + 1
-                max_search_depth = max(max_search_depth, new_depth)  # FIX: Track depth when adding
-                stack.append((neighbour, new_depth))
+                stack.append((neighbour, depth + 1))
                 
     return None, None, expanded, max_search_depth
 
 
-def calculate_solution_depth(goal, parent):
+def calculate_solution_depth(goal, parent):  # Better name
     """Calculate the number of moves in the solution path"""
     depth = 0
     key = tuple(goal)
@@ -114,9 +112,9 @@ if checkinstances(arr):
         print("Goal found!")
         print(f"\nStatistics:")
         print(f"  Solution depth (moves): {solution_depth}")
+        print(f"  Expanded nodes: {expanded}")
         print_path(goal, parent)
         print(f"  Max search depth: {max_depth}")
-        print(f"  Expanded nodes: {expanded}")
     else:
         print("No solution found.")
         print(f"Expanded nodes: {expanded}")
