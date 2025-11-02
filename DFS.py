@@ -13,8 +13,7 @@ def DfS(arr):
         expanded += 1
         max_search_depth = max(max_search_depth, depth)
         if Isgoal(node):
-            return node, parent, expanded, max_search_depth  # Return max_search_depth
-        
+            return node, parent, expanded, max_search_depth 
         for neighbour in getneighbours(node):
             nkey = tuple(neighbour)
             if nkey not in visited:
@@ -86,10 +85,6 @@ def print_path(goal, parent):
             print(state[i:i+3])
     return step
 
-# --- MAIN ---
-arr = [1, 0, 2,
-       7, 5, 4,
-       8, 6, 3]
 
 def checkinstances(arr):
     # Exclude 0 from inversion count
@@ -101,28 +96,3 @@ def checkinstances(arr):
                 num += 1
     return num % 2 == 0
 
-
-if checkinstances(arr):
-    result = DfS(arr)
-    goal, parent, expanded, max_depth = result
-    
-    if goal:
-        solution_depth = calculate_solution_depth(goal, parent)
-        print("Goal found!")
-        print(f"\nStatistics:")
-        print(f"  Solution depth (moves): {solution_depth}")
-        print(f"  Expanded nodes: {expanded}")
-        cost= print_path(goal, parent)
-        print(f"  Max search depth: {max_depth}")
-        result = {
-        "parent": parent,
-        "expanded": expanded,
-        "cost": cost,
-        "solution_depth": solution_depth
-        }
-    else:
-        print("No solution found.")
-        print(f"Expanded nodes: {expanded}")
-        print(f"Max search depth: {max_depth}")
-else:
-    print("No solution exists (puzzle has odd number of inversions).")

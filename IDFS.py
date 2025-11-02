@@ -83,30 +83,3 @@ def checkinstances(arr):
             if filtered[i] > filtered[j]:
                 num += 1
     return num % 2 == 0
-
-
-# Test
-arr = [1, 0, 2,
-       7, 5, 4,
-       8, 6, 3]
-
-print("Starting state:")
-for i in range(0, 9, 3):
-    print(arr[i:i+3])
-
-if checkinstances(arr):
-    result, depth = IDFS(arr)
-    if result:
-        print("\nGoal found!")
-        print_path(result)
-        print(f"\nTotal nodes expanded: {total_expanded}")
-        result = {
-            "parent": result,
-            "expanded": total_expanded,
-            "cost": len(result) - 1,
-            "solution_depth": depth
-        }
-    else:
-        print("No solution found.")
-else:
-    print("No solution exists for this configuration.")
