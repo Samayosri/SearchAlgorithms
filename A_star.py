@@ -8,9 +8,10 @@ goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 def A_Star(start,heuristic):
     Parent={}
     expanded=0
+    search_depth=0
     if start == goal:
         print("Reach Goal")
-        return Parent,expanded
+        return Parent,expanded,0,0
     frontier = [] # {F(State):Statue}
     visited = set() # Keep visited state
     g_n=[] # {State : G(State)}
@@ -21,9 +22,10 @@ def A_Star(start,heuristic):
         f, v = heapq.heappop(frontier) # POP the Min F(n)
         visited.add(tuple(v)) # Add this State to visited list
         expanded+=1
+        search_depth=max(search_depth,g_n[tuple(v)])
         if v==goal:  # Check if this the goal
             print("reach goal")
-            return Parent,expanded
+            return Parent,expanded,g_n[tuple(v)],search_depth
         for neighbour in getNeighbours(v): # Go through neighbours of Currnt State . 
             t=tuple(neighbour)
             if t not in visited:         
@@ -111,16 +113,16 @@ def is_solvable(puzzle):
 
 # start = [8, 1, 2, 0, 4, 3, 7, 6, 5]
 # start = [1, 2, 5, 3, 4, 0, 6, 7, 8]
-# start = [1, 0, 2 ,7, 5, 4, 8, 6, 3]
+start = [1, 0, 2 ,7, 5, 4, 8, 6, 3]
 # start = [1, 2, 3 ,4, 5, 6, 8, 7, 0]
 # start = [6, 4, 7 ,8, 5, 0, 3, 2, 1]
-start = [8, 6, 7 ,2, 5, 4, 3, 0, 1]
+# start = [8, 6, 7 ,2, 5, 4, 3, 0, 1]
 start_time = time.time()
 
 if is_solvable(start):
-    parent_manhattan, expanded_manhattan = A_Star(start, manhattan_distance)
+    parent_manhattan, expanded_manhattan,cost_path,search_depth = A_Star(start, manhattan_distance)
     printPath(parent_manhattan, goal)
-
+    print(f"cost of path : {cost_path} , nodes expanded = {expanded_manhattan} ,search depth = {search_depth}")
 
   #  parent_euclidean, expanded_euclidean = A_Star(start, euclidean_distance)
    

@@ -5,29 +5,36 @@ rows = 3
 goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 def BFS(start: list):
     Parent={}
-        
+    expanded=0
+    search_depth=0
+    g_n=[]
     if start == goal:
 
         print("Reach Goal")
-        return Parent
+        return Parent,expanded,0,0
     
     frontier = Queue()
     frontier.put(start)
     visited = set() 
+    g_n = {tuple(start): 0} 
     Parent[tuple(start)]=None
+    visited.add(tuple(start))
     while not frontier.empty():
         v = frontier.get()
-        visited.add(tuple(v))
+        search_depth=max(search_depth,g_n[tuple(v)])
+        expanded+=1
         if v == goal:
             print("Reach Goal")
-            return Parent
+            return Parent,expanded,g_n[tuple(v)],search_depth
        
         
         for neighbour in getNeighbours(v):
             t = tuple(neighbour)
             if t not in visited:
+                g_n[t]=g_n[tuple(v)]+1 
                 Parent[t]=v
                 frontier.put(neighbour)
+                visited.add(t)
     
     print("No solution found !!!!!!!!!!!!!!!!")
 
@@ -85,16 +92,18 @@ def is_solvable(puzzle):
 
 # start = [8, 1, 2, 0, 4, 3, 7, 6, 5]
 # start = [1, 2, 5, 3, 4, 0, 6, 7, 8]
-# start = [1, 0, 2 ,7, 5, 4, 8, 6, 3]
+start = [1, 0, 2 ,7, 5, 4, 8, 6, 3]
 # start = [1, 2, 3 ,4, 5, 6, 8, 7, 0]
-start = [6, 4, 7 ,8, 5, 0, 3, 2, 1]
+# start = [6, 4, 7 ,8, 5, 0, 3, 2, 1]
 # start = [8, 6, 7 ,2, 5, 4, 3, 0, 1]
 
 start_time = time.time()
 if is_solvable(start):
-    Parent = BFS(start)
+    Parent, expanded, cost_path, search_depth = BFS(start)
     printPath(Parent, goal)
+    print(f"Cost of path: {cost_path}, Nodes expanded: {expanded}, Search depth: {search_depth}")
 else:
     print("This puzzle is unsolvable!")
+
 end_time = time.time()  
 print(f"Execution time: {end_time - start_time:.4f} seconds")
