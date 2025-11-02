@@ -1,15 +1,15 @@
 from queue import Queue
-
+import time
 cols = 3
 rows = 3
-Parent={}
 goal = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 def BFS(start: list):
-    
-    
+    Parent={}
+        
     if start == goal:
+
         print("Reach Goal")
-        return
+        return Parent
     
     frontier = Queue()
     frontier.put(start)
@@ -20,7 +20,8 @@ def BFS(start: list):
         visited.add(tuple(v))
         if v == goal:
             print("Reach Goal")
-            return
+            return Parent
+       
         
         for neighbour in getNeighbours(v):
             t = tuple(neighbour)
@@ -37,8 +38,7 @@ def valid(i, j):
 
 def getNeighbours(v: list):
     indexOfZero = v.index(0)
-    i = indexOfZero // cols
-    j = indexOfZero % cols
+    i, j = divmod(indexOfZero, cols)
     neighbours = []
     
     dx = [-1, 1, 0, 0]
@@ -73,7 +73,28 @@ def printPuzzle(state):
     for i in range(rows):
         print(state[i*cols:(i+1)*cols])
 
+def is_solvable(puzzle):
+    inv_count = 0
+    arr = [x for x in puzzle if x != 0]  # ignore the blank
+    for i in range(len(arr)):
+        for j in range(i + 1, len(arr)):
+            if arr[i] > arr[j]:
+                inv_count += 1
+    return inv_count % 2 == 0
 
-start = [1, 2, 5, 3, 4, 0, 6, 7, 8]
-BFS(start)
-printPath(Parent,goal)
+
+# start = [8, 1, 2, 0, 4, 3, 7, 6, 5]
+# start = [1, 2, 5, 3, 4, 0, 6, 7, 8]
+# start = [1, 0, 2 ,7, 5, 4, 8, 6, 3]
+# start = [1, 2, 3 ,4, 5, 6, 8, 7, 0]
+start = [6, 4, 7 ,8, 5, 0, 3, 2, 1]
+# start = [8, 6, 7 ,2, 5, 4, 3, 0, 1]
+
+start_time = time.time()
+if is_solvable(start):
+    Parent = BFS(start)
+    printPath(Parent, goal)
+else:
+    print("This puzzle is unsolvable!")
+end_time = time.time()  
+print(f"Execution time: {end_time - start_time:.4f} seconds")
